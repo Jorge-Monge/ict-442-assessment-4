@@ -255,10 +255,11 @@ function initMap() {
             // Email validation
         } else if (event.target.matches("#email_input")) {
             // Some value in the email field
+            validEmail = false;
             if (form_marker_email_input.value != '') {
                 // Validate it!
                 if (!IsValidEmail(event.target.value)) { // invalid email
-                    validEmail = false;
+                
                     if (!req_email.classList.contains("invalid_input")) {
                         req_email.classList.add("invalid_input");
                     }
