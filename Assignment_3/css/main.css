@@ -1,0 +1,132 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    text-align: center;
+}
+
+button {
+    height: 40px;
+    margin: 10px;
+}
+
+button.basemap_option {
+    background-color: white;
+    border-radius: 8px;
+    border: 2px solid gray;
+}
+
+button.basemap_option.option_selected {
+    border: 2px solid red;
+}
+
+
+.custom_popup_html {
+    background-color: white;
+}
+.custom_popup_html p{
+    margin: 5px 0;
+}
+
+.leaflet-popup-content-wrapper {
+    background: rgba(255,255,255,0);
+    box-shadow: none;
+}
+
+.leaflet-popup-tip {
+    display: none;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+    color: #006dcc;
+ }
+
+.center-all-ontop {
+    font-size: 3em;
+    color: #006dcc;
+    z-index: 1000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    
+
+}
+#main_map {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+#main_map.crosshair_enabled {
+    cursor: crosshair;
+}
+/* Style of the marker information form */
+#new_marker_container {
+    background-color: rgba(255,255,255,0.9);
+    margin-left: 0;
+    margin-top: 30px;
+    padding: 20px;
+    position: fixed;
+    z-index: 1000;
+    top: 50px;
+    left: 5px;
+    min-width: 30%;
+    border-radius: 5px;
+}
+
+#map_buttons_container {
+    z-index: 1000;
+    position: absolute;
+    top: 18px;
+    left: 70px;
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-between;
+}
+
+#basemap_options_container {
+    display: flex;
+    flex-flow: wrap;
+    flex-direction: column;
+}
+
+/* Style of the 'Insert New Location' button */
+#insert_marker {
+    z-index: 1000;
+    /*position: absolute;
+    top: 18px;
+    left: 70px;*/
+}
+
+/* Style of the 'Change Basemap' button */
+#change_basemap {
+    z-index: 1000;
+    /*position: absolute;
+    top: 18px;
+    left: 250px;*/
+}
+
+.delete_marker {
+    height: 15px;
+}
+
+.marker_popup_footer {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
