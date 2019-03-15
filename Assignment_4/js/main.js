@@ -19,8 +19,8 @@ if (WINDOW_HOST === "127.0.0.1") {
 
 // Capturing parameters, if any
 const WINDOW_URL = new URL(window.location.href);
-const LAT = WINDOW_URL.searchParams.get(lat);
-const LON = WINDOW_URL.searchParams.get(lon);
+const LAT = WINDOW_URL.searchParams.get("lat");
+const LON = WINDOW_URL.searchParams.get("lon");
 
 
 // URL of the Netlify-deployed AWS serverless functions
