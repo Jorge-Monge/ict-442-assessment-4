@@ -777,6 +777,9 @@ function mapClicked(event) {
         // Disable the 'Change Basemap' button
         change_basemap_btn.disabled = true;
 
+        // Open the form with the Submit button disabled
+        submit_marker.disabled = true;
+
         // Invoke the function to draw a temporary marker
         // (users will need to populate the new-marker form and click on
         // the form submit button in order to make it a permanent marker).
