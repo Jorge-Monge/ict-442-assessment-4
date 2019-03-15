@@ -17,6 +17,12 @@ if (WINDOW_HOST === "127.0.0.1") {
     localDebug = true;
 };
 
+// Capturing parameters, if any
+const WINDOW_URL = new URL(window.location.href);
+const LAT = WINDOW_URL.searchParams.get(lat);
+const LON = WINDOW_URL.searchParams.get(lon);
+
+
 // URL of the Netlify-deployed AWS serverless functions
 // It is a Node JS function that is used to
 // interact with a PostgreSQL database in the cloud
@@ -103,6 +109,9 @@ var chesterLake = {lat: 50.82508, lng: -115.26280} // Chester Lake, Kananaskis
 
 // Desired startup location
 var startLocation = chesterLake;
+if (LAT && LON) {// If the user introduced the URL with parameters
+    var startLocation = {lat: LAT, lng: LON};
+}
 
 //
 // TILESET PROVIDERS
