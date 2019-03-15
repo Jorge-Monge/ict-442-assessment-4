@@ -62,7 +62,7 @@
         <div id="basemap_options_container">
             <button id="change_basemap" class="btn btn-primary" title="Click here to change the base map">Change
                 Basemap</button>
-            <button id="bm-openstreet" class="Openstreet basemap_option option_selected btn hide">OpenStreet</button>
+            <button id="bm-openstreet" class="Openstreet basemap_option btn hide">OpenStreet</button>
             <button id="bm-mb-streets" class="Mapbox basemap_option btn hide">Mapbox - Streets</button>
             <button id="bm-mb-outdoors" class="Mapbox basemap_option btn hide">Mapbox - Outdoors</button>
             <button id="bm-mb-satellite" class="Mapbox basemap_option btn hide">Mapbox - Satellite</button>
@@ -80,11 +80,12 @@
     <!-- Insert new location information - FORM
         This is the form where the user introduces the marker's name, text, and category.
         They can also upload an image, and have the new markers emailed to them  -->
-    <form id="new_marker_container" class="hide">
+    <form id="new_marker_container" class="">
         <div id="marker_name" class="nmc_section">
             <label for="marker_name_input">Name of Point of Interest:</label>
             <span id="req_name" class="required_warning invalid_input">(required)</span>
-            <input type="text" class="form-control" id="marker_name_input" autofocus placeholder="Enter the name of the POI">
+            <input type="text" class="form-control" id="marker_name_input" autofocus
+                placeholder="Enter the name of the POI">
         </div>
         <div id="marker_category" class="nmc_section ">
             <div id="cat_group_label" class="">Category</div>
@@ -116,14 +117,15 @@
         <div id="email_section" class="nmc_section">
             <label for="email_input">Email:</label>
             <span id="req_email" class="required_warning invalid_input">(valid email required)</span>
-            <div id="opt_in_email" class="">By clicking 'Submit' you are implicitly opting in to receive 1 email from jaymont847@gmail.com</div>
+            <div id="opt_in_email" class="">By clicking 'Submit' you are implicitly opting in to receive an email from
+                jaymont847@gmail.com</div>
             <input type="email" class="form-control" id="email_input" placeholder="Enter your email">
         </div>
 
         <div id="marker_category" class="nmc_section">
-                <button type="submit" id="submit_marker" class="btn btn-primary" disabled>Submit</button>
-                <button id="cancel_marker" class="btn btn-primary">Cancel</button>
-            </div>
+            <button id="submit_marker" class="btn btn-primary" disabled>Submit</button>
+            <button id="cancel_marker" class="btn btn-primary">Cancel</button>
+        </div>
 
     </form>
 

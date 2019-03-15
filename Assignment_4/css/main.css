@@ -97,15 +97,22 @@ button.basemap_option:hover {
 
 /* Style of the new marker information form */
 
-@keyframes animMarkerForm {
-    0%   {left: -100%;}
-    100% {left:0%;}
-}
-@-webkit-keyframes animMarkerForm {
-    0%   {left: -100%;}
-    100% {left:0%;}
+@-webkit-keyframes slide_open {
+100% { left: 0; }
 }
 
+@keyframes slide_open {
+100% { left: 0; }
+}
+
+@-webkit-keyframes slide_close {
+    100% { left: -100%; }
+}
+    
+@keyframes slide_close {
+    100% { left: -100%; }
+}
+/*
 #new_marker_container {
     font-weight: 700;
     background-color: rgba(50, 50, 50, 0.9);
@@ -114,14 +121,53 @@ button.basemap_option:hover {
     position: absolute;
     z-index: 1000;
     top: 0;
-    left: 0;
+    left: -100%;
     min-width: 30%;
     border-bottom-right-radius: 5px;
-    animation: animMarkerForm 0.3s;
-    -webkit-animation: animMarkerForm 0.3s;
+}
+*/
+#new_marker_container {
+    font-weight: 700;
+    background-color: rgba(50, 50, 50, 0.9);
+    margin: 0;
+    padding: 0px;
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: -100%;
+    min-width: 30%;
+    border-bottom-right-radius: 5px;
 }
 
+#new_marker_container.shown {
+    font-weight: 700;
+    background-color: rgba(50, 50, 50, 0.9);
+    margin: 0;
+    padding: 0px;
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: -100%;
+    min-width: 30%;
+    border-bottom-right-radius: 5px;
+    -webkit-animation: slide_open 0.5s forwards;
+    animation: slide_open 0.5s forwards;
+}
 
+#new_marker_container.escondido {
+    font-weight: 700;
+    background-color: rgba(50, 50, 50, 0.9);
+    margin: 0;
+    padding: 0px;
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    min-width: 30%;
+    border-bottom-right-radius: 5px;
+    left: 0;
+    -webkit-animation: slide_close 1s forwards;
+    animation: slide_close 1s forwards;
+}
 
 input[type="radio"] {
     margin-top: -1px;
@@ -131,8 +177,6 @@ input[type="radio"] {
 
 .nmc_section {
     padding: 10px;
-    color: #ff9800;
-    color: whitesmoke;
     color: rgb(230,230,230);
     text-shadow: 0 0 10px black;
 }
@@ -140,10 +184,6 @@ input[type="radio"] {
 .nmc_section 
 .nmc_section div {
     margin: 10px 0;
-}
-
-.invalid_input {
-    color: red;
 }
 
 .nmc_section span {

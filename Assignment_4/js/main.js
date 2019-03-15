@@ -10,24 +10,28 @@ const L_PREFER_CANVAS = false;
 const L_NO_TOUCH = false;
 const L_DISABLE_3D = false;
 
+let localDebug = false;
+
+const WINDOW_HOST = window.location.hostname;
+if (WINDOW_HOST === "127.0.0.1") {
+    localDebug = true;
+};
+
 // URL of the Netlify-deployed AWS serverless functions
 // It is a Node JS function that is used to
 // interact with a PostgreSQL database in the cloud
-var urlBack = "/.netlify/functions/pg_connect";
-// Line below needed for local debugging. COMMENT IT OUT FOR PRODUCTION
-//urlBack = "http://localhost:9000/pg_connect";
+var urlBack = localDebug ? "http://localhost:9000/pg_connect" :
+"/.netlify/functions/pg_connect";
 
 // Node JS function that is used to get the Mapbox token
 // (thus hiding it (to a limited extent) from the front-end)
-var url_mt = "/.netlify/functions/get_mapbox_token";
-// Line below needed for local debugging. COMMENT IT OUT FOR PRODUCTION
-//url_mt = "http://localhost:9000/get_mapbox_token";
+var url_mt = localDebug ? "http://localhost:9000/get_mapbox_token" :
+    "/.netlify/functions/get_mapbox_token";
 
 // Node JS function that is used to send emails
-var urlServerFunction = "/.netlify/functions/mailer";
 // Line below needed for local debugging. COMMENT IT OUT FOR PRODUCTION
-//urlServerFunction = "http://localhost:9000/mailer";
-
+var urlServerFunction = localDebug ? "http://localhost:9000/mailer":
+    "/.netlify/functions/mailer";
 
 // Connect to one of the AWS serverless functions
 // and get the Mapbox token as soon as possible.
@@ -93,6 +97,12 @@ var submit_marker = null;
 // ... and to cancel the input
 var cancel_marker = null;
 
+// Geographical locations
+var noseHill = {lat: 51.112942, lng: -114.111327} // Nose Hill Park
+var chesterLake = {lat: 50.82508, lng: -115.26280} // Chester Lake, Kananaskis
+
+// Desired startup location
+var startLocation = chesterLake;
 
 //
 // TILESET PROVIDERS
@@ -168,8 +178,7 @@ function initMap() {
     // Map definition
     main_map = L.map(
         'main_map', {
-            //center: [51.112942, -114.111327], // Nose Hill Park
-            center: [50.82508, -115.26280], // Chester Lake, Kananaskis
+            center: [startLocation.lat, startLocation.lng],
             zoom: 13,
             maxBounds: bounds,
             layers: [],
@@ -269,7 +278,6 @@ function initMap() {
                     if (req_email.classList.contains("invalid_input")) {
                         req_email.classList.remove("invalid_input");
                     }
-
                 }
             }
             // Check if the Submit button can be enabled
@@ -278,7 +286,7 @@ function initMap() {
     })
 
     // Invocation of the submitMarker function upon submission of the form
-    new_marker_form.addEventListener("submit", (event) => {
+    submit_marker.addEventListener("click", (event) => {
         event.preventDefault();
         submitMarker(event);
     });
@@ -347,17 +355,11 @@ function initMap() {
             hideBasemapOptionBtns(basemap_options_btns);
             // Toggle the cursor between cross and panning hand
             prepInsertMarker(event);
-            var insButn = document.querySelectorAll("#insert_marker")[0];
-            var defaultText = "Insert New Location";
-            if (insButn.innerText === defaultText) {
-                insButn.innerText = "Cancel New Location Insertion";
-            } else {
-                insButn.innerText = defaultText;
-            }
         }
 
         // CANCEL MARKER SUBMISSION BUTTON CLICKED
         else if (event.target.matches("#cancel_marker")) {
+            event.preventDefault();
             cancelMarker(event);
         }
     }, false); // Event listeners on the whole map object ends
@@ -370,6 +372,7 @@ function initMap() {
     // Mapbox Outdoors as startup map
     var mb = changeBaseMap(mapbox_outdoors_btn.classList, "bm-mb-outdoors");
     draw_basemap(mb.url, mb.options);
+    document.getElementById("bm-mb-outdoors").classList.toggle("option_selected");
     //
     // GET THE MARKERS FROM THE DATABASE, AND DRAW THEM (when fetching ends)
     getMarkersFromDB("selectAllQuery", {}, []);
@@ -762,7 +765,11 @@ function mapClicked(event) {
 
     if (main_map_container.classList.contains("crosshair_enabled")) {
         // Display the new-marker form.
-        new_marker_form.classList.replace("hide", "show");
+        if (new_marker_form.classList.contains("escondido")) {
+            new_marker_form.classList.remove("escondido");
+        }
+        new_marker_form.classList.add("shown");
+
         // Change the cursor icon back to the icon of a hand
         main_map_container.classList.toggle("crosshair_enabled");
         // Disable the 'Insert New Location' button
@@ -857,7 +864,7 @@ function submitMarker() {
     marker_name = form_marker_name_input.value || "[Name not entered]";
     marker_text = form_marker_text_input.value || "[Text not entered]";
     to_email = form_marker_email_input.value;
-    console.log("to_email: ", to_email);
+    
     // Converts the image uploaded to Base64 encoding
         // form_marker_img_input.files[0] is maintained from previous upload operation
         if (form_marker_img_input.files) {
@@ -898,7 +905,10 @@ function submitMarker() {
             .then(() => sendEmail(to_email))
 
     // Hide the form to introduce marker details
-    new_marker_form.classList.replace("show", "hide");
+     // Hide the form to introduce marker details    
+     new_marker_form.classList.add("escondido");
+     new_marker_form.classList.remove("shown");
+
     // Empty the form so it looks good when re-opened
     form_marker_name_input.value = "";
     form_marker_text_input.value = "";
@@ -907,6 +917,17 @@ function submitMarker() {
     form_marker_email_input.value = null;
     insert_marker_btn.disabled = false;
     change_basemap_btn.disabled = false;
+    // Reset the classes for the 'required' inputs
+    if (!req_name.classList.contains("invalid_input")) {
+        req_name.classList.add("invalid_input");
+    }
+    if (!req_text.classList.contains("invalid_input")) {
+        req_text.classList.add("invalid_input");
+    }
+    if (!req_email.classList.contains("invalid_input")) {
+        req_email.classList.add("invalid_input");
+    }
+
 }
 
 
@@ -918,11 +939,13 @@ function cancelMarker() {
     /* This function removes the just-inserted marker.
        Also, it re-enables the 'Insert New Location' button and
        hides the form */
-    console.log("Inside the cancelMarker function");
     // Remove the marker just drawn
     main_map.removeLayer(tempMarker);
-    // Hide the form to introduce marker details
-    new_marker_form.classList.replace("show", "hide");
+    
+    // Hide the form to introduce marker details    
+    new_marker_form.classList.add("escondido");
+    new_marker_form.classList.remove("shown");
+   
     // Re-enable the 'Insert New Location' button
     insert_marker_btn.disabled = false;
     change_basemap_btn.disabled = false;
