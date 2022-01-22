@@ -19,6 +19,7 @@
     "nodemailer-smtp-transport": "^2.7.4",
     "pg": "^7.8.1",
     "pg-native": "^3.0.0",
+    "underscore": "^1.13.2",
     "update": "^0.7.4"
   }
 }
